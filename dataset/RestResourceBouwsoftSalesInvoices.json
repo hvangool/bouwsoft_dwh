@@ -8,7 +8,7 @@
 		"annotations": [],
 		"type": "RestResource",
 		"typeProperties": {
-			"relativeUrl": "SalesInvoices?columns=id|company_id|type_id|ne|date|address_id|project_id|basis1|basis2|basis3|basis4|basis5&limit=500&offset={offset}&sort=id"
+			"relativeUrl": "SalesInvoices?columns=id|company_id|type_id|nr|date|address_id|project_id|basis1|basis2|basis3|basis4|basis5&limit=500&offset={offset}&sort=id"
 		},
 		"schema": []
 	}
