@@ -1,0 +1,9 @@
+{
+	"name": "bouwsoftDataFactory",
+	"location": "westeurope",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "5933c3ea-f1e9-41d9-92ab-ccc8eee0c361",
+		"tenantId": "7c0e4cd3-835d-4e2f-847c-b5e05c299df1"
+	}
+}
