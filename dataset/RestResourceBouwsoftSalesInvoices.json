@@ -1,5 +1,5 @@
 {
-	"name": "RestResourceBouwsoftPurchaseInvoices_copy1",
+	"name": "RestResourceBouwsoftSalesInvoices",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "RestServiceBouwsoft",
