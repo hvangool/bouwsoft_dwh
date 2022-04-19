@@ -27,16 +27,8 @@
 						"httpRequestTimeout": "00:01:40",
 						"requestInterval": "00.00:00:00.010",
 						"requestMethod": "GET",
-						"additionalHeaders": {
-							"Content-Length": "0",
-							"Clientnr": "6080",
-							"AccessToken": {
-								"value": "@activity('Lookup Parameters').output.firstRow.AccessToken",
-								"type": "Expression"
-							}
-						},
 						"paginationRules": {
-							"AbsoluteUrl.{offset}": "RANGE:0:100000:500"
+							"supportRFC5988": "true"
 						}
 					},
 					"sink": {
@@ -54,111 +46,18 @@
 					"enableStaging": false,
 					"translator": {
 						"type": "TabularTranslator",
-						"mappings": [
-							{
-								"source": {
-									"path": "['id']"
-								},
-								"sink": {
-									"name": "id",
-									"type": "Int64"
-								}
-							},
-							{
-								"source": {
-									"path": "['company_id']"
-								},
-								"sink": {
-									"name": "company_id",
-									"type": "Int64"
-								}
-							},
-							{
-								"source": {
-									"path": "['date']"
-								},
-								"sink": {
-									"name": "date",
-									"type": "DateTime"
-								}
-							},
-							{
-								"source": {
-									"path": "['nr_supplier']"
-								},
-								"sink": {
-									"name": "nr_supplier",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['address_id']"
-								},
-								"sink": {
-									"name": "address_id",
-									"type": "Int64"
-								}
-							},
-							{
-								"source": {
-									"path": "['basis1']"
-								},
-								"sink": {
-									"name": "basis1",
-									"type": "Decimal"
-								}
-							},
-							{
-								"source": {
-									"path": "['basis2']"
-								},
-								"sink": {
-									"name": "basis2",
-									"type": "Decimal"
-								}
-							},
-							{
-								"source": {
-									"path": "['basis3']"
-								},
-								"sink": {
-									"name": "basis3",
-									"type": "Decimal"
-								}
-							},
-							{
-								"source": {
-									"path": "['basis4']"
-								},
-								"sink": {
-									"name": "basis4",
-									"type": "Decimal"
-								}
-							},
-							{
-								"source": {
-									"path": "['basis5']"
-								},
-								"sink": {
-									"name": "basis5",
-									"type": "Decimal"
-								}
-							}
-						],
-						"collectionReference": "$['Records']",
 						"mapComplexValuesToString": false
 					}
 				},
 				"inputs": [
 					{
-						"referenceName": "RestResourceBouwsoftPurchaseInvoices",
+						"referenceName": "RestResourceBouwsoftSalesInvoices",
 						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "AzureSqlPurchaseInvoices",
+						"referenceName": "AzureSqlSalesInvoices",
 						"type": "DatasetReference"
 					}
 				]
