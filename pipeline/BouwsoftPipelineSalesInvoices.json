@@ -135,15 +135,6 @@
 							},
 							{
 								"source": {
-									"path": "['nr_supplier']"
-								},
-								"sink": {
-									"name": "nr_supplier",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
 									"path": "['address_id']"
 								},
 								"sink": {
