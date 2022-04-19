@@ -1,5 +1,5 @@
 {
-	"name": "AzureSqlPurchaseInvoices_copy1",
+	"name": "AzureSqlSalesInvoices",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureSqlDatabase",
