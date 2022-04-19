@@ -1,0 +1,15 @@
+{
+	"name": "RestResourcePurchaseInvoices",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "RestServiceBouwsoft",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"typeProperties": {
+			"relativeUrl": "PurchaseInvoices?columns=id|company_id|date|ne_supplier|address_id|basis1|basis2|basis3|basis4|basis5&limit=500&offset={offset}&sort=id"
+		},
+		"schema": []
+	}
+}
