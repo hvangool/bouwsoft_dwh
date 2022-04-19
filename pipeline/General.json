@@ -94,6 +94,26 @@
 					},
 					"waitOnCompletion": true
 				}
+			},
+			{
+				"name": "BouwsoftPipelinePurchaseInvoices",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "BouwsoftPipelinePurchaseOrders",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "BouwsoftPipelinePurchaseInvoices",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
 			}
 		],
 		"annotations": [],
