@@ -108,17 +108,7 @@
 						"mappings": [
 							{
 								"source": {
-									"path": "$['Content-Range']"
-								}
-							},
-							{
-								"source": {
-									"path": "$['NextId']"
-								}
-							},
-							{
-								"source": {
-									"path": "$['Records'][0]['id']"
+									"path": "['id']"
 								},
 								"sink": {
 									"name": "id",
@@ -127,7 +117,7 @@
 							},
 							{
 								"source": {
-									"path": "$['Records'][0]['company_id']"
+									"path": "['company_id']"
 								},
 								"sink": {
 									"name": "company_id",
@@ -136,7 +126,7 @@
 							},
 							{
 								"source": {
-									"path": "$['Records'][0]['type_id']"
+									"path": "['type_id']"
 								},
 								"sink": {
 									"name": "type_id",
@@ -145,7 +135,7 @@
 							},
 							{
 								"source": {
-									"path": "$['Records'][0]['nr']"
+									"path": "['nr']"
 								},
 								"sink": {
 									"name": "nr",
@@ -154,7 +144,7 @@
 							},
 							{
 								"source": {
-									"path": "$['Records'][0]['date']"
+									"path": "['date']"
 								},
 								"sink": {
 									"name": "date",
@@ -163,7 +153,7 @@
 							},
 							{
 								"source": {
-									"path": "$['Records'][0]['address_id']"
+									"path": "['address_id']"
 								},
 								"sink": {
 									"name": "address_id",
@@ -172,7 +162,7 @@
 							},
 							{
 								"source": {
-									"path": "$['Records'][0]['project_id']"
+									"path": "['project_id']"
 								},
 								"sink": {
 									"name": "project_id",
@@ -181,7 +171,7 @@
 							},
 							{
 								"source": {
-									"path": "$['Records'][0]['basis1']"
+									"path": "['basis1']"
 								},
 								"sink": {
 									"name": "basis1",
@@ -190,7 +180,7 @@
 							},
 							{
 								"source": {
-									"path": "$['Records'][0]['basis2']"
+									"path": "['basis2']"
 								},
 								"sink": {
 									"name": "basis2",
@@ -199,7 +189,7 @@
 							},
 							{
 								"source": {
-									"path": "$['Records'][0]['basis3']"
+									"path": "['basis3']"
 								},
 								"sink": {
 									"name": "basis3",
@@ -208,7 +198,7 @@
 							},
 							{
 								"source": {
-									"path": "$['Records'][0]['basis4']"
+									"path": "['basis4']"
 								},
 								"sink": {
 									"name": "basis4",
@@ -217,7 +207,7 @@
 							},
 							{
 								"source": {
-									"path": "$['Records'][0]['basis5']"
+									"path": "['basis5']"
 								},
 								"sink": {
 									"name": "basis5",
@@ -225,7 +215,7 @@
 								}
 							}
 						],
-						"collectionReference": "",
+						"collectionReference": "$['Records']",
 						"mapComplexValuesToString": false
 					}
 				},
