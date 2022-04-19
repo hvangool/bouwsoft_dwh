@@ -1,0 +1,13 @@
+{
+	"name": "RestServiceBouwsoftAccessToken",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "RestService",
+		"typeProperties": {
+			"url": "https://charon.bouwsoft.be/api/v1/Authorize/AccessToken",
+			"enableServerCertificateValidation": true,
+			"authenticationType": "Anonymous"
+		}
+	}
+}

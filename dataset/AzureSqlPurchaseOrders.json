@@ -1,0 +1,17 @@
+{
+	"name": "AzureSqlPurchaseOrders",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "PurchaseOrders"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

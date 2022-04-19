@@ -1,0 +1,53 @@
+{
+	"name": "AzureSqlAddresses",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "id",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "clientnr",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "suppliernr",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "name",
+				"type": "nvarchar"
+			},
+			{
+				"name": "address",
+				"type": "nvarchar"
+			},
+			{
+				"name": "city",
+				"type": "nvarchar"
+			},
+			{
+				"name": "zipcode",
+				"type": "nvarchar"
+			},
+			{
+				"name": "countrycode",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Addresses"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

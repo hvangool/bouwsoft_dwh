@@ -1,0 +1,13 @@
+{
+	"name": "RestResourceAccessToken",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "RestServiceBouwsoftAccessToken",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

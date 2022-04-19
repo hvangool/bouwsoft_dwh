@@ -1,0 +1,103 @@
+{
+	"name": "General",
+	"properties": {
+		"activities": [
+			{
+				"name": "BouwsoftPipelineParameters",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "BouwsoftPipelineParameters",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "BouwsoftPipelineAddresses",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "BouwsoftPipelineParameters",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "BouwsoftPipelineAddresses",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "BouwsoftPipelineProjects",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "BouwsoftPipelineAddresses",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "BouwsoftPipelineProjects",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "BouwsoftPipelineCompanyDetails",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "BouwsoftPipelineProjects",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "BouwsoftPipelineCompanyDetails",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "BouwsoftPipelinePurchaseOrders",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "BouwsoftPipelineCompanyDetails",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "BouwsoftPipelinePurchaseOrders",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2022-04-14T08:41:49Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

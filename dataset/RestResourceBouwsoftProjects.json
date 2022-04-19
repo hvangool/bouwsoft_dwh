@@ -1,0 +1,16 @@
+{
+	"name": "RestResourceBouwsoftProjects",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "RestServiceBouwsoft",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"typeProperties": {
+			"relativeUrl": "projects?&columns=id|pnr|name|company_id&limit=500&offset={offset}&sort=id"
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

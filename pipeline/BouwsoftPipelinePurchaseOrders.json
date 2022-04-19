@@ -1,0 +1,266 @@
+{
+	"name": "BouwsoftPipelinePurchaseOrders",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy PurchaseOrders",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Lookup Parameters",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "RestSource",
+						"httpRequestTimeout": "00:01:40",
+						"requestInterval": "00.00:00:00.010",
+						"requestMethod": "GET",
+						"additionalHeaders": {
+							"Content-Length": "0",
+							"Clientnr": "6080",
+							"AccessToken": {
+								"value": "@activity('Lookup Parameters').output.firstRow.AccessToken",
+								"type": "Expression"
+							}
+						},
+						"paginationRules": {
+							"AbsoluteUrl.{offset}": "RANGE:0:10000:500"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"writeBehavior": "upsert",
+						"upsertSettings": {
+							"useTempDB": true,
+							"keys": [
+								"id"
+							]
+						},
+						"sqlWriterUseTableLock": false,
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"path": "['id']"
+								},
+								"sink": {
+									"name": "id",
+									"type": "Int64"
+								}
+							},
+							{
+								"source": {
+									"path": "['nr']"
+								},
+								"sink": {
+									"name": "nr",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['company_id']"
+								},
+								"sink": {
+									"name": "company_id",
+									"type": "Int64"
+								}
+							},
+							{
+								"source": {
+									"path": "['project_id']"
+								},
+								"sink": {
+									"name": "project_id",
+									"type": "Int64"
+								}
+							},
+							{
+								"source": {
+									"path": "['address_id']"
+								},
+								"sink": {
+									"name": "address_id",
+									"type": "Int64"
+								}
+							},
+							{
+								"source": {
+									"path": "['ledger']"
+								},
+								"sink": {
+									"name": "ledger",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['billed']"
+								},
+								"sink": {
+									"name": "billed",
+									"type": "Boolean"
+								}
+							},
+							{
+								"source": {
+									"path": "['approved']"
+								},
+								"sink": {
+									"name": "approved",
+									"type": "Boolean"
+								}
+							},
+							{
+								"source": {
+									"path": "['delivered']"
+								},
+								"sink": {
+									"name": "delivered",
+									"type": "Boolean"
+								}
+							},
+							{
+								"source": {
+									"path": "['date']"
+								},
+								"sink": {
+									"name": "date"
+								}
+							},
+							{
+								"source": {
+									"path": "['basis1']"
+								},
+								"sink": {
+									"name": "basis1",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"path": "['basis2']"
+								},
+								"sink": {
+									"name": "basis2",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"path": "['basis3']"
+								},
+								"sink": {
+									"name": "basis3",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"path": "['basis4']"
+								},
+								"sink": {
+									"name": "basis4",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"path": "['basis5']"
+								},
+								"sink": {
+									"name": "basis5",
+									"type": "Decimal"
+								}
+							}
+						],
+						"collectionReference": "$['Records']",
+						"mapComplexValuesToString": false
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "RestResourceBouwsoftPurchaseOrders",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "AzureSqlPurchaseOrders",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Truncate PurchaseOrders",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[Truncate_PurchaseOrders]"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Lookup Parameters",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Truncate PurchaseOrders",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "AzureSqlParameters",
+						"type": "DatasetReference"
+					}
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2022-04-14T08:41:17Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

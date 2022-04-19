@@ -1,0 +1,9 @@
+{
+	"name": "tsgbnldatafactory",
+	"location": "westeurope",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "743746d7-e831-460f-9cc1-5149309024cd",
+		"tenantId": "bc4a852e-012f-478f-a25f-362bfc3f2b7e"
+	}
+}

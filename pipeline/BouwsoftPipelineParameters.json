@@ -1,0 +1,160 @@
+{
+	"name": "BouwsoftPipelineParameters",
+	"properties": {
+		"activities": [
+			{
+				"name": "Lookup Parameters",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "AzureSqlParameters",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "If AcessToken expired",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "Lookup Parameters",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@less(activity('Lookup Parameters').output.firstRow.ValidUntil,utcnow())",
+						"type": "Expression"
+					},
+					"ifTrueActivities": [
+						{
+							"name": "Copy Parameters",
+							"type": "Copy",
+							"dependsOn": [
+								{
+									"activity": "Truncate Parameters",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "RestSource",
+									"httpRequestTimeout": "00:01:40",
+									"requestInterval": "00.00:00:00.010",
+									"requestMethod": "GET",
+									"additionalHeaders": {
+										"Clientnr": "6080",
+										"RefreshToken": "UlPSDrSjPlAWSxllVSAqzOjVSSIlSVjtStPRAbmbVItfjxIGfR"
+									}
+								},
+								"sink": {
+									"type": "AzureSqlSink",
+									"writeBehavior": "insert",
+									"sqlWriterUseTableLock": false,
+									"disableMetricsCollection": false
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"mappings": [
+										{
+											"source": {
+												"path": "$['AccessToken']"
+											},
+											"sink": {
+												"name": "AccessToken",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"path": "$['ServerName']"
+											},
+											"sink": {
+												"name": "ServerName",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"path": "$['ValidUntil']"
+											},
+											"sink": {
+												"name": "ValidUntil",
+												"type": "String"
+											}
+										}
+									],
+									"collectionReference": "",
+									"mapComplexValuesToString": false
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "RestResourceAccessToken",
+									"type": "DatasetReference"
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "AzureSqlParameters",
+									"type": "DatasetReference"
+								}
+							]
+						},
+						{
+							"name": "Truncate Parameters",
+							"type": "SqlServerStoredProcedure",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"storedProcedureName": "[dbo].[Truncate_Parameters]"
+							},
+							"linkedServiceName": {
+								"referenceName": "AzureSqlDatabase",
+								"type": "LinkedServiceReference"
+							}
+						}
+					]
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2022-04-13T14:31:15Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

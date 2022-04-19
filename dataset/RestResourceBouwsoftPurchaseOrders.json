@@ -1,0 +1,16 @@
+{
+	"name": "RestResourceBouwsoftPurchaseOrders",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "RestServiceBouwsoft",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"typeProperties": {
+			"relativeUrl": "PurchaseOrders?columns=id|nr|company_id|project_id|address_id|ledger|billed|approved|delivered|date|basis1|basis2|basis3|basis4|basis5&limit=500&offset={offset}&sort=id"
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

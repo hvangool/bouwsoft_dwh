@@ -1,0 +1,30 @@
+{
+	"name": "AzureSqlParameters",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "AccessToken",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ServerName",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ValidUntil",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Parameters"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
