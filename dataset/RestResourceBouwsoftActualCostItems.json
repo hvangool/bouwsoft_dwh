@@ -8,7 +8,7 @@
 		"annotations": [],
 		"type": "RestResource",
 		"typeProperties": {
-			"relativeUrl": "ActualCostItems?id|project_id|actualcost_id|description&limit=500&offset={offset}&sort=id"
+			"relativeUrl": "ActualCostItems?columns=id|project_id|actualcost_id|description&limit=500&offset={offset}&sort=id"
 		},
 		"schema": []
 	}
