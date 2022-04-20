@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Truncate SalesInvoices",
+				"name": "Truncate PurchaseInvoiceProjects",
 				"type": "SqlServerStoredProcedure",
 				"dependsOn": [],
 				"policy": {
@@ -15,7 +15,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"storedProcedureName": "[dbo].[Truncate_SalesInvoices]"
+					"storedProcedureName": "[dbo].[Truncate_PurchaseInvoiceProjects]"
 				},
 				"linkedServiceName": {
 					"referenceName": "AzureSqlDatabase",
@@ -27,7 +27,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Truncate SalesInvoices",
+						"activity": "Truncate PurchaseInvoiceProjects",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -54,7 +54,7 @@
 				}
 			},
 			{
-				"name": "Copy SalesInvoices",
+				"name": "Copy PurchaseInvoiceProjects",
 				"type": "Copy",
 				"dependsOn": [
 					{
@@ -105,129 +105,18 @@
 					"enableStaging": false,
 					"translator": {
 						"type": "TabularTranslator",
-						"mappings": [
-							{
-								"source": {
-									"path": "['id']"
-								},
-								"sink": {
-									"name": "id",
-									"type": "Int64"
-								}
-							},
-							{
-								"source": {
-									"path": "['company_id']"
-								},
-								"sink": {
-									"name": "company_id",
-									"type": "Int64"
-								}
-							},
-							{
-								"source": {
-									"path": "['type_id']"
-								},
-								"sink": {
-									"name": "type_id",
-									"type": "Int64"
-								}
-							},
-							{
-								"source": {
-									"path": "['nr']"
-								},
-								"sink": {
-									"name": "nr",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['date']"
-								},
-								"sink": {
-									"name": "date",
-									"type": "DateTime"
-								}
-							},
-							{
-								"source": {
-									"path": "['address_id']"
-								},
-								"sink": {
-									"name": "address_id",
-									"type": "Int64"
-								}
-							},
-							{
-								"source": {
-									"path": "['project_id']"
-								},
-								"sink": {
-									"name": "project_id",
-									"type": "Int64"
-								}
-							},
-							{
-								"source": {
-									"path": "['basis1']"
-								},
-								"sink": {
-									"name": "basis1",
-									"type": "Decimal"
-								}
-							},
-							{
-								"source": {
-									"path": "['basis2']"
-								},
-								"sink": {
-									"name": "basis2",
-									"type": "Decimal"
-								}
-							},
-							{
-								"source": {
-									"path": "['basis3']"
-								},
-								"sink": {
-									"name": "basis3",
-									"type": "Decimal"
-								}
-							},
-							{
-								"source": {
-									"path": "['basis4']"
-								},
-								"sink": {
-									"name": "basis4",
-									"type": "Decimal"
-								}
-							},
-							{
-								"source": {
-									"path": "['basis5']"
-								},
-								"sink": {
-									"name": "basis5",
-									"type": "Decimal"
-								}
-							}
-						],
-						"collectionReference": "$['Records']",
 						"mapComplexValuesToString": false
 					}
 				},
 				"inputs": [
 					{
-						"referenceName": "RestResourceBouwsoftSalesInvoices",
+						"referenceName": "RestResourceBouwsoftPurchaseInvoiceProjects",
 						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "AzureSqlSalesInvoices",
+						"referenceName": "AzureSqlPurchaseInvoiceProjects",
 						"type": "DatasetReference"
 					}
 				]
