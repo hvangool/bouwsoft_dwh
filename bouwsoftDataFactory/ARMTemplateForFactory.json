@@ -25,6 +25,188 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/BouwsoftPipelineActualCostItems')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Truncate ActualCostItems",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[Truncate_ActualCostItems]"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureSqlDatabase",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Lookup Parameters",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Truncate ActualCostItems",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "AzureSqlParameters",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					},
+					{
+						"name": "Copy ActualCostItems",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Lookup Parameters",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET",
+								"additionalHeaders": {
+									"Content-Length": "0",
+									"Clientnr": "6080",
+									"AccessToken": {
+										"value": "@activity('Lookup Parameters').output.firstRow.AccessToken",
+										"type": "Expression"
+									}
+								},
+								"paginationRules": {
+									"AbsoluteUrl.{offset}": "RANGE:0:100000:500"
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "upsert",
+								"upsertSettings": {
+									"useTempDB": true,
+									"keys": [
+										"id"
+									]
+								},
+								"sqlWriterUseTableLock": false,
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "[['id']"
+										},
+										"sink": {
+											"name": "id",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"path": "[['project_id']"
+										},
+										"sink": {
+											"name": "project_id",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"path": "[['actualcost_id']"
+										},
+										"sink": {
+											"name": "actualcost_id",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"path": "[['description']"
+										},
+										"sink": {
+											"name": "description",
+											"type": "String"
+										}
+									}
+								],
+								"collectionReference": "$['Records']",
+								"mapComplexValuesToString": false
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "RestResourceBouwsoftActualCostItems",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "AzureSqlActualCostItems",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-04-14T08:41:17Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase')]",
+				"[concat(variables('factoryId'), '/datasets/AzureSqlParameters')]",
+				"[concat(variables('factoryId'), '/datasets/RestResourceBouwsoftActualCostItems')]",
+				"[concat(variables('factoryId'), '/datasets/AzureSqlActualCostItems')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/BouwsoftPipelineAddresses')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -883,6 +1065,215 @@
 				"[concat(variables('factoryId'), '/datasets/AzureSqlProjects')]",
 				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase')]",
 				"[concat(variables('factoryId'), '/datasets/AzureSqlParameters')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/BouwsoftPipelinePurchaseInvoiceProjects')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Truncate PurchaseInvoiceProjects",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[Truncate_PurchaseInvoiceProjects]"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureSqlDatabase",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Lookup Parameters",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Truncate PurchaseInvoiceProjects",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "AzureSqlParameters",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					},
+					{
+						"name": "Copy PurchaseInvoiceProjects",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Lookup Parameters",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET",
+								"additionalHeaders": {
+									"Content-Length": "0",
+									"Clientnr": "6080",
+									"AccessToken": {
+										"value": "@activity('Lookup Parameters').output.firstRow.AccessToken",
+										"type": "Expression"
+									}
+								},
+								"paginationRules": {
+									"AbsoluteUrl.{offset}": "RANGE:0:100000:500"
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "upsert",
+								"upsertSettings": {
+									"useTempDB": true,
+									"keys": [
+										"id"
+									]
+								},
+								"sqlWriterUseTableLock": false,
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "[['id']"
+										},
+										"sink": {
+											"name": "id",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"path": "[['purchaseinvoice_id']"
+										},
+										"sink": {
+											"name": "purchaseinvoice_id",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"path": "[['purchaseinvoice_nr']"
+										},
+										"sink": {
+											"name": "purchaseinvoice_nr",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['address_supplier_id']"
+										},
+										"sink": {
+											"name": "address_supplier_id",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"path": "[['project_id']"
+										},
+										"sink": {
+											"name": "project_id",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"path": "[['actualcostitem_id']"
+										},
+										"sink": {
+											"name": "actualcostitem_id",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"path": "[['amount']"
+										},
+										"sink": {
+											"name": "amount",
+											"type": "Decimal"
+										}
+									}
+								],
+								"collectionReference": "$['Records']",
+								"mapComplexValuesToString": false
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "RestResourceBouwsoftPurchaseInvoiceProjects",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "AzureSqlPurchaseInvoiceProjects",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-04-14T08:41:17Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase')]",
+				"[concat(variables('factoryId'), '/datasets/AzureSqlParameters')]",
+				"[concat(variables('factoryId'), '/datasets/RestResourceBouwsoftPurchaseInvoiceProjects')]",
+				"[concat(variables('factoryId'), '/datasets/AzureSqlPurchaseInvoiceProjects')]"
 			]
 		},
 		{
@@ -1800,6 +2191,48 @@
 							"waitOnCompletion": true,
 							"parameters": {}
 						}
+					},
+					{
+						"name": "BouwsoftPipelineActualCostItems",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "BouwsoftPipelineSalesInvoices",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "BouwsoftPipelineActualCostItems",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "BouwsoftPipelinePurchaseInvoiceProjects",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "BouwsoftPipelineActualCostItems",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "BouwsoftPipelinePurchaseInvoiceProjects",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
 					}
 				],
 				"policy": {
@@ -1816,7 +2249,86 @@
 				"[concat(variables('factoryId'), '/pipelines/BouwsoftPipelineCompanyDetails')]",
 				"[concat(variables('factoryId'), '/pipelines/BouwsoftPipelinePurchaseOrders')]",
 				"[concat(variables('factoryId'), '/pipelines/BouwsoftPipelinePurchaseInvoices')]",
-				"[concat(variables('factoryId'), '/pipelines/BouwsoftPipelineSalesInvoices')]"
+				"[concat(variables('factoryId'), '/pipelines/BouwsoftPipelineSalesInvoices')]",
+				"[concat(variables('factoryId'), '/pipelines/BouwsoftPipelineActualCostItems')]",
+				"[concat(variables('factoryId'), '/pipelines/BouwsoftPipelinePurchaseInvoiceProjects')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureSqlActualCostItems')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "id",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "company_id",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "date",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "nr_supplier",
+						"type": "nvarchar"
+					},
+					{
+						"name": "address_id",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "basis1",
+						"type": "decimal",
+						"precision": 10,
+						"scale": 2
+					},
+					{
+						"name": "basis2",
+						"type": "decimal",
+						"precision": 10,
+						"scale": 2
+					},
+					{
+						"name": "basis3",
+						"type": "decimal",
+						"precision": 10,
+						"scale": 2
+					},
+					{
+						"name": "basis4",
+						"type": "decimal",
+						"precision": 10,
+						"scale": 2
+					},
+					{
+						"name": "basis5",
+						"type": "decimal",
+						"precision": 10,
+						"scale": 2
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "ActualCostItems"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase')]"
 			]
 		},
 		{
@@ -1976,6 +2488,83 @@
 				"typeProperties": {
 					"schema": "dbo",
 					"table": "Projects"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureSqlPurchaseInvoiceProjects')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "id",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "company_id",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "date",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "nr_supplier",
+						"type": "nvarchar"
+					},
+					{
+						"name": "address_id",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "basis1",
+						"type": "decimal",
+						"precision": 10,
+						"scale": 2
+					},
+					{
+						"name": "basis2",
+						"type": "decimal",
+						"precision": 10,
+						"scale": 2
+					},
+					{
+						"name": "basis3",
+						"type": "decimal",
+						"precision": 10,
+						"scale": 2
+					},
+					{
+						"name": "basis4",
+						"type": "decimal",
+						"precision": 10,
+						"scale": 2
+					},
+					{
+						"name": "basis5",
+						"type": "decimal",
+						"precision": 10,
+						"scale": 2
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "PurchaseInvoiceProjects"
 				}
 			},
 			"dependsOn": [
@@ -2176,6 +2765,26 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/RestResourceBouwsoftActualCostItems')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "RestServiceBouwsoft",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": "ActualCostItems?columns=id|project_id|actualcost_id|description&limit=500&offset={offset}&sort=id"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/RestServiceBouwsoft')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/RestResourceBouwsoftAddresses')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -2228,6 +2837,26 @@
 				"type": "RestResource",
 				"typeProperties": {
 					"relativeUrl": "projects?&columns=id|pnr|name|company_id&limit=500&offset={offset}&sort=id"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/RestServiceBouwsoft')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/RestResourceBouwsoftPurchaseInvoiceProjects')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "RestServiceBouwsoft",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": "PurchaseInvoiceProjects?columns=id|purchaseinvoice_id|purchaseinvoice_nr|address_supplier_id|project_id|actualcostitem_id|amount&limit=500&offset={offset}&sort=id"
 				},
 				"schema": []
 			},
@@ -2337,44 +2966,6 @@
 				}
 			},
 			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/BouwsoftDatawarehouse')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"runtimeState": "Started",
-				"pipelines": [
-					{
-						"pipelineReference": {
-							"referenceName": "General",
-							"type": "PipelineReference"
-						},
-						"parameters": {}
-					}
-				],
-				"type": "ScheduleTrigger",
-				"typeProperties": {
-					"recurrence": {
-						"frequency": "Day",
-						"interval": 1,
-						"startTime": "2022-04-14T07:58:00Z",
-						"timeZone": "UTC",
-						"schedule": {
-							"minutes": [
-								0
-							],
-							"hours": [
-								2
-							]
-						}
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/General')]"
-			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/AutoResolveIntegrationRuntime')]",
