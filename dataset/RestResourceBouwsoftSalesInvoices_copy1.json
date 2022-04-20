@@ -1,0 +1,15 @@
+{
+	"name": "RestResourceBouwsoftSalesInvoices_copy1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "RestServiceBouwsoft",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"typeProperties": {
+			"relativeUrl": "ActualCostItems?is|project_id|actualcost_id|description&limit=500&offset={offset}&sort=id"
+		},
+		"schema": []
+	}
+}
