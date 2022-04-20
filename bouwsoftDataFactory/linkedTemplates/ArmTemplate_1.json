@@ -2256,6 +2256,44 @@
 				"[concat(variables('factoryId'), '/pipelines/BouwsoftPipelineActualCostItems')]",
 				"[concat(variables('factoryId'), '/pipelines/BouwsoftPipelinePurchaseInvoiceProjects')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/refreshBouwsoftDataWarehouse')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "General",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Day",
+						"interval": 1,
+						"startTime": "2022-04-20T09:54:00Z",
+						"timeZone": "UTC",
+						"schedule": {
+							"minutes": [
+								0
+							],
+							"hours": [
+								2
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/General')]"
+			]
 		}
 	]
 }
