@@ -1,0 +1,15 @@
+{
+	"name": "RestResourceBouwsoftPurchaseInvoiceProjects",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "RestServiceBouwsoft",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"typeProperties": {
+			"relativeUrl": "PurchaseInvoiceProjects?columns=id|purchaseinvoice_id|purchaseinvoice_nr|address_supplier_id|project_id|actualcostitem_id|amount&limit=500&offset={offset}&sort=id"
+		},
+		"schema": []
+	}
+}
