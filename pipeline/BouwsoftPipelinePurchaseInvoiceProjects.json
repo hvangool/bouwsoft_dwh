@@ -105,6 +105,72 @@
 					"enableStaging": false,
 					"translator": {
 						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"path": "['id']"
+								},
+								"sink": {
+									"name": "id",
+									"type": "Int64"
+								}
+							},
+							{
+								"source": {
+									"path": "['purchaseinvoice_id']"
+								},
+								"sink": {
+									"name": "purchaseinvoice_id",
+									"type": "Int64"
+								}
+							},
+							{
+								"source": {
+									"path": "['purchaseinvoice_nr']"
+								},
+								"sink": {
+									"name": "purchaseinvoice_nr",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['address_supplier_id']"
+								},
+								"sink": {
+									"name": "address_supplier_id",
+									"type": "Int64"
+								}
+							},
+							{
+								"source": {
+									"path": "['project_id']"
+								},
+								"sink": {
+									"name": "project_id",
+									"type": "Int64"
+								}
+							},
+							{
+								"source": {
+									"path": "['actualcostitem_id']"
+								},
+								"sink": {
+									"name": "actualcostitem_id",
+									"type": "Int64"
+								}
+							},
+							{
+								"source": {
+									"path": "['amount']"
+								},
+								"sink": {
+									"name": "amount",
+									"type": "Decimal"
+								}
+							}
+						],
+						"collectionReference": "$['Records']",
 						"mapComplexValuesToString": false
 					}
 				},
