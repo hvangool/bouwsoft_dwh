@@ -134,6 +134,46 @@
 					},
 					"waitOnCompletion": true
 				}
+			},
+			{
+				"name": "BouwsoftPipelineActualCostItems",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "BouwsoftPipelineSalesInvoices",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "BouwsoftPipelineActualCostItems",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "BouwsoftPipelinePurchaseInvoiceProjects",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "BouwsoftPipelineActualCostItems",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "BouwsoftPipelinePurchaseInvoiceProjects",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
 			}
 		],
 		"annotations": [],
