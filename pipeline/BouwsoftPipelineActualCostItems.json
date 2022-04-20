@@ -105,24 +105,6 @@
 					"enableStaging": false,
 					"translator": {
 						"type": "TabularTranslator",
-						"mappings": [
-							{
-								"source": {
-									"path": "$['Content-Range']"
-								}
-							},
-							{
-								"source": {
-									"path": "$['NextId']"
-								}
-							},
-							{
-								"source": {
-									"path": "$['Records']"
-								}
-							}
-						],
-						"collectionReference": "",
 						"mapComplexValuesToString": false
 					}
 				},
