@@ -123,7 +123,7 @@
 							}
 						],
 						"collectionReference": "",
-						"mapComplexValuesToString": false
+						"mapComplexValuesToString": true
 					}
 				},
 				"inputs": [
