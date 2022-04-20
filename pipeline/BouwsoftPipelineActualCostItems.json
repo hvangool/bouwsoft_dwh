@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Truncate PurchaseInvoiceProjects",
+				"name": "Truncate ActualCostItems",
 				"type": "SqlServerStoredProcedure",
 				"dependsOn": [],
 				"policy": {
@@ -15,7 +15,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"storedProcedureName": "[dbo].[Truncate_PurchaseInvoiceProjects]"
+					"storedProcedureName": "[dbo].[Truncate_ActualCostItems]"
 				},
 				"linkedServiceName": {
 					"referenceName": "AzureSqlDatabase",
@@ -27,7 +27,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Truncate PurchaseInvoiceProjects",
+						"activity": "Truncate ActualCostItems",
 						"dependencyConditions": [
 							"Succeeded"
 						]
