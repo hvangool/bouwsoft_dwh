@@ -108,22 +108,43 @@
 						"mappings": [
 							{
 								"source": {
-									"path": "$['Content-Range']"
+									"path": "['id']"
+								},
+								"sink": {
+									"name": "id",
+									"type": "Int64"
 								}
 							},
 							{
 								"source": {
-									"path": "$['NextId']"
+									"path": "['project_id']"
+								},
+								"sink": {
+									"name": "project_id",
+									"type": "Int64"
 								}
 							},
 							{
 								"source": {
-									"path": "$['Records']"
+									"path": "['actualcost_id']"
+								},
+								"sink": {
+									"name": "actualcost_id",
+									"type": "Int64"
+								}
+							},
+							{
+								"source": {
+									"path": "['description']"
+								},
+								"sink": {
+									"name": "description",
+									"type": "String"
 								}
 							}
 						],
-						"collectionReference": "",
-						"mapComplexValuesToString": true
+						"collectionReference": "$['Records']",
+						"mapComplexValuesToString": false
 					}
 				},
 				"inputs": [
