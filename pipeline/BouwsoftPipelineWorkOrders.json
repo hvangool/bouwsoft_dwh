@@ -142,15 +142,6 @@
 									"name": "status",
 									"type": "String"
 								}
-							},
-							{
-								"source": {
-									"path": "['Comment']"
-								},
-								"sink": {
-									"name": "comment",
-									"type": "String"
-								}
 							}
 						],
 						"collectionReference": "$['response']",
@@ -159,7 +150,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "RestResourceBouwsoftWorkOrders",
+						"referenceName": "RestResourceOutsmartWorkOrders",
 						"type": "DatasetReference"
 					}
 				],
