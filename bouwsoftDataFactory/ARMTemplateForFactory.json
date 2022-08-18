@@ -590,6 +590,168 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/BouwsoftPipelineEmployees')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy Employees",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Lookup Parameters",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET"
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "upsert",
+								"upsertSettings": {
+									"useTempDB": true,
+									"keys": [
+										"id"
+									]
+								},
+								"sqlWriterUseTableLock": false,
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "[['number']"
+										},
+										"sink": {
+											"name": "id",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"path": "[['lastname']"
+										},
+										"sink": {
+											"name": "lastname",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['firstname']"
+										},
+										"sink": {
+											"name": "firstname",
+											"type": "String"
+										}
+									}
+								],
+								"collectionReference": "$['response']",
+								"mapComplexValuesToString": true
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "RestResourceOutsmartEmployees",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "AzureSqlEmployees",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Truncate Employees",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[Truncate_Employees]"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureSqlDatabase",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Lookup Parameters",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Truncate Employees",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "AzureSqlParameters",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-04-13T12:07:55Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/RestResourceOutsmartEmployees')]",
+				"[concat(variables('factoryId'), '/datasets/AzureSqlEmployees')]",
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase')]",
+				"[concat(variables('factoryId'), '/datasets/AzureSqlParameters')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/BouwsoftPipelineParameters')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -2127,6 +2289,15 @@
 									},
 									{
 										"source": {
+											"path": "[['WorkDate']"
+										},
+										"sink": {
+											"name": "workdate",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
 											"path": "[['CustomerName']"
 										},
 										"sink": {
@@ -2140,6 +2311,15 @@
 										},
 										"sink": {
 											"name": "customerstreet",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['CustomerZIP']"
+										},
+										"sink": {
+											"name": "customerzip",
 											"type": "String"
 										}
 									},
@@ -2163,21 +2343,48 @@
 									},
 									{
 										"source": {
+											"path": "[['CreationDate']"
+										},
+										"sink": {
+											"name": "creationdate",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
 											"path": "[['status']"
 										},
 										"sink": {
 											"name": "status",
 											"type": "String"
 										}
+									},
+									{
+										"source": {
+											"path": "[['EmployeeNr']"
+										},
+										"sink": {
+											"name": "employee_id",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"path": "[['WorkDuration']"
+										},
+										"sink": {
+											"name": "workduration",
+											"type": "Int64"
+										}
 									}
 								],
 								"collectionReference": "$['response']",
-								"mapComplexValuesToString": false
+								"mapComplexValuesToString": true
 							}
 						},
 						"inputs": [
 							{
-								"referenceName": "RestResourceBouwsoftWorkOrders",
+								"referenceName": "RestResourceOutsmartWorkOrders",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -2251,7 +2458,7 @@
 				"lastPublishTime": "2022-04-13T12:07:55Z"
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/RestResourceBouwsoftWorkOrders')]",
+				"[concat(variables('factoryId'), '/datasets/RestResourceOutsmartWorkOrders')]",
 				"[concat(variables('factoryId'), '/datasets/AzureSqlWorkOrders')]",
 				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase')]",
 				"[concat(variables('factoryId'), '/datasets/AzureSqlParameters')]"
@@ -2450,7 +2657,7 @@
 						"type": "ExecutePipeline",
 						"dependsOn": [
 							{
-								"activity": "BouwsoftPipelinePurchaseInvoiceProjects",
+								"activity": "BouwsoftPipelineEmployees",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -2460,6 +2667,27 @@
 						"typeProperties": {
 							"pipeline": {
 								"referenceName": "BouwsoftPipelineWorkOrders",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "BouwsoftPipelineEmployees",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "BouwsoftPipelinePurchaseInvoiceProjects",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "BouwsoftPipelineEmployees",
 								"type": "PipelineReference"
 							},
 							"waitOnCompletion": true,
@@ -2484,7 +2712,8 @@
 				"[concat(variables('factoryId'), '/pipelines/BouwsoftPipelineSalesInvoices')]",
 				"[concat(variables('factoryId'), '/pipelines/BouwsoftPipelineActualCostItems')]",
 				"[concat(variables('factoryId'), '/pipelines/BouwsoftPipelinePurchaseInvoiceProjects')]",
-				"[concat(variables('factoryId'), '/pipelines/BouwsoftPipelineWorkOrders')]"
+				"[concat(variables('factoryId'), '/pipelines/BouwsoftPipelineWorkOrders')]",
+				"[concat(variables('factoryId'), '/pipelines/BouwsoftPipelineEmployees')]"
 			]
 		},
 		{
@@ -2651,6 +2880,41 @@
 				"typeProperties": {
 					"schema": "dbo",
 					"table": "CompanyDetails"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureSqlEmployees')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "id",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "firstname",
+						"type": "nvarchar"
+					},
+					{
+						"name": "lastname",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Employees"
 				}
 			},
 			"dependsOn": [
@@ -3017,6 +3281,10 @@
 						"type": "nvarchar"
 					},
 					{
+						"name": "customerzip",
+						"type": "nvarchar"
+					},
+					{
 						"name": "customerstreet",
 						"type": "nvarchar"
 					},
@@ -3031,7 +3299,7 @@
 						"type": "nvarchar"
 					},
 					{
-						"name": "employeenr",
+						"name": "employee_id",
 						"type": "bigint",
 						"precision": 19
 					},
@@ -3237,7 +3505,27 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/RestResourceBouwsoftWorkOrders')]",
+			"name": "[concat(parameters('factoryName'), '/RestResourceOutsmartEmployees')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "RestServiceOutsmart",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": "employees?token=148af45b01225b21e3576967dd0a42b3&software_token=ac0447ccbba1c0ae31f10d59084a03e3fe3c76a4"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/RestServiceOutsmart')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/RestResourceOutsmartWorkOrders')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {

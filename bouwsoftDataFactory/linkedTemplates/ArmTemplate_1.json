@@ -17,6 +17,24 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/RestResourceBouwsoftPurchaseInvoiceProjects')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "RestServiceBouwsoft",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": "PurchaseInvoiceProjects?columns=id|purchaseinvoice_id|purchaseinvoice_nr|address_supplier_id|project_id|actualcostitem_id|amount&limit=500&offset={offset}&sort=id"
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/RestResourceBouwsoftPurchaseInvoices')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -1314,7 +1332,9 @@
 				"annotations": [],
 				"lastPublishTime": "2022-04-14T08:41:17Z"
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/RestResourceBouwsoftPurchaseInvoiceProjects')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/BouwsoftPipelinePurchaseInvoices')]",
@@ -2099,7 +2119,27 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/RestResourceBouwsoftWorkOrders')]",
+			"name": "[concat(parameters('factoryName'), '/RestResourceOutsmartEmployees')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "RestServiceOutsmart",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": "employees?token=148af45b01225b21e3576967dd0a42b3&software_token=ac0447ccbba1c0ae31f10d59084a03e3fe3c76a4"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/RestServiceOutsmart')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/RestResourceOutsmartWorkOrders')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -2116,6 +2156,165 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/RestServiceOutsmart')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/BouwsoftPipelineEmployees')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy Employees",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Lookup Parameters",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET"
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "upsert",
+								"upsertSettings": {
+									"useTempDB": true,
+									"keys": [
+										"id"
+									]
+								},
+								"sqlWriterUseTableLock": false,
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "[['number']"
+										},
+										"sink": {
+											"name": "id",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"path": "[['lastname']"
+										},
+										"sink": {
+											"name": "lastname",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['firstname']"
+										},
+										"sink": {
+											"name": "firstname",
+											"type": "String"
+										}
+									}
+								],
+								"collectionReference": "$['response']",
+								"mapComplexValuesToString": true
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "RestResourceOutsmartEmployees",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "AzureSqlEmployees",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Truncate Employees",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[Truncate_Employees]"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureSqlDatabase",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Lookup Parameters",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Truncate Employees",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "AzureSqlParameters",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-04-13T12:07:55Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/RestResourceOutsmartEmployees')]"
 			]
 		},
 		{
@@ -2195,6 +2394,15 @@
 									},
 									{
 										"source": {
+											"path": "[['WorkDate']"
+										},
+										"sink": {
+											"name": "workdate",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
 											"path": "[['CustomerName']"
 										},
 										"sink": {
@@ -2208,6 +2416,15 @@
 										},
 										"sink": {
 											"name": "customerstreet",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['CustomerZIP']"
+										},
+										"sink": {
+											"name": "customerzip",
 											"type": "String"
 										}
 									},
@@ -2231,21 +2448,48 @@
 									},
 									{
 										"source": {
+											"path": "[['CreationDate']"
+										},
+										"sink": {
+											"name": "creationdate",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
 											"path": "[['status']"
 										},
 										"sink": {
 											"name": "status",
 											"type": "String"
 										}
+									},
+									{
+										"source": {
+											"path": "[['EmployeeNr']"
+										},
+										"sink": {
+											"name": "employee_id",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"path": "[['WorkDuration']"
+										},
+										"sink": {
+											"name": "workduration",
+											"type": "Int64"
+										}
 									}
 								],
 								"collectionReference": "$['response']",
-								"mapComplexValuesToString": false
+								"mapComplexValuesToString": true
 							}
 						},
 						"inputs": [
 							{
-								"referenceName": "RestResourceBouwsoftWorkOrders",
+								"referenceName": "RestResourceOutsmartWorkOrders",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -2319,275 +2563,7 @@
 				"lastPublishTime": "2022-04-13T12:07:55Z"
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/RestResourceBouwsoftWorkOrders')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/General')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "BouwsoftPipelineParameters",
-						"type": "ExecutePipeline",
-						"dependsOn": [],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "BouwsoftPipelineParameters",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {}
-						}
-					},
-					{
-						"name": "BouwsoftPipelineAddresses",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "BouwsoftPipelineParameters",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "BouwsoftPipelineAddresses",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {}
-						}
-					},
-					{
-						"name": "BouwsoftPipelineProjects",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "BouwsoftPipelineAddresses",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "BouwsoftPipelineProjects",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {}
-						}
-					},
-					{
-						"name": "BouwsoftPipelineCompanyDetails",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "BouwsoftPipelineProjects",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "BouwsoftPipelineCompanyDetails",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {}
-						}
-					},
-					{
-						"name": "BouwsoftPipelinePurchaseOrders",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "BouwsoftPipelineCompanyDetails",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "BouwsoftPipelinePurchaseOrders",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {}
-						}
-					},
-					{
-						"name": "BouwsoftPipelinePurchaseInvoices",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "BouwsoftPipelinePurchaseOrders",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "BouwsoftPipelinePurchaseInvoices",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {}
-						}
-					},
-					{
-						"name": "BouwsoftPipelineSalesInvoices",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "BouwsoftPipelinePurchaseInvoices",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "BouwsoftPipelineSalesInvoices",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {}
-						}
-					},
-					{
-						"name": "BouwsoftPipelineActualCostItems",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "BouwsoftPipelineSalesInvoices",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "BouwsoftPipelineActualCostItems",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {}
-						}
-					},
-					{
-						"name": "BouwsoftPipelinePurchaseInvoiceProjects",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "BouwsoftPipelineActualCostItems",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "BouwsoftPipelinePurchaseInvoiceProjects",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {}
-						}
-					},
-					{
-						"name": "BouwsoftPipelineWorkOrders",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "BouwsoftPipelinePurchaseInvoiceProjects",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "BouwsoftPipelineWorkOrders",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {}
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"annotations": [],
-				"lastPublishTime": "2022-04-14T08:41:49Z"
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/BouwsoftPipelineParameters')]",
-				"[concat(variables('factoryId'), '/pipelines/BouwsoftPipelineAddresses')]",
-				"[concat(variables('factoryId'), '/pipelines/BouwsoftPipelineProjects')]",
-				"[concat(variables('factoryId'), '/pipelines/BouwsoftPipelineCompanyDetails')]",
-				"[concat(variables('factoryId'), '/pipelines/BouwsoftPipelinePurchaseOrders')]",
-				"[concat(variables('factoryId'), '/pipelines/BouwsoftPipelinePurchaseInvoices')]",
-				"[concat(variables('factoryId'), '/pipelines/BouwsoftPipelineSalesInvoices')]",
-				"[concat(variables('factoryId'), '/pipelines/BouwsoftPipelineActualCostItems')]",
-				"[concat(variables('factoryId'), '/pipelines/BouwsoftPipelinePurchaseInvoiceProjects')]",
-				"[concat(variables('factoryId'), '/pipelines/BouwsoftPipelineWorkOrders')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/refreshBouwsoftDataWarehouse')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"runtimeState": "Started",
-				"pipelines": [
-					{
-						"pipelineReference": {
-							"referenceName": "General",
-							"type": "PipelineReference"
-						},
-						"parameters": {}
-					}
-				],
-				"type": "ScheduleTrigger",
-				"typeProperties": {
-					"recurrence": {
-						"frequency": "Day",
-						"interval": 1,
-						"startTime": "2022-04-20T09:54:00Z",
-						"timeZone": "UTC",
-						"schedule": {
-							"minutes": [
-								0
-							],
-							"hours": [
-								2
-							]
-						}
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/General')]"
+				"[concat(variables('factoryId'), '/datasets/RestResourceOutsmartWorkOrders')]"
 			]
 		}
 	]
