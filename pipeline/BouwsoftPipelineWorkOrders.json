@@ -154,7 +154,7 @@
 							},
 							{
 								"source": {
-									"path": "['Comment']"
+									"path": "['CreationDate']"
 								},
 								"sink": {
 									"name": "comment"
