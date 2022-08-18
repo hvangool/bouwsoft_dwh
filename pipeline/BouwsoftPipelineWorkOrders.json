@@ -142,6 +142,15 @@
 									"name": "workduration",
 									"type": "Int64"
 								}
+							},
+							{
+								"source": {
+									"path": "['EmployeeNr']"
+								},
+								"sink": {
+									"name": "employee_id",
+									"type": "Int64"
+								}
 							}
 						],
 						"collectionReference": "$['response']",
