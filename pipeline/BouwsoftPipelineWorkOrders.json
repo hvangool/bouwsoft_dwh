@@ -67,15 +67,6 @@
 							},
 							{
 								"source": {
-									"path": "['WorkDate']"
-								},
-								"sink": {
-									"name": "workdate",
-									"type": "DateTime"
-								}
-							},
-							{
-								"source": {
 									"path": "['CustomerName']"
 								},
 								"sink": {
