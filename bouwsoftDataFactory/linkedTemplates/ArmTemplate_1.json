@@ -2177,6 +2177,15 @@
 											"name": "ordernr",
 											"type": "String"
 										}
+									},
+									{
+										"source": {
+											"path": "[['ProjectNr']"
+										},
+										"sink": {
+											"name": "projectnr",
+											"type": "String"
+										}
 									}
 								],
 								"collectionReference": "$['response']",
