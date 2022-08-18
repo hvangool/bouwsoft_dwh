@@ -2189,6 +2189,15 @@
 									},
 									{
 										"source": {
+											"path": "[['WorkDate']"
+										},
+										"sink": {
+											"name": "workdate",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
 											"path": "[['CustomerName']"
 										},
 										"sink": {
@@ -2211,6 +2220,15 @@
 										},
 										"sink": {
 											"name": "customercity",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['status']"
+										},
+										"sink": {
+											"name": "status",
 											"type": "String"
 										}
 									}
