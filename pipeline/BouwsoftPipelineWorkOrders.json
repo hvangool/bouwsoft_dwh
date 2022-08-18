@@ -30,15 +30,8 @@
 					},
 					"sink": {
 						"type": "AzureSqlSink",
-						"writeBehavior": "upsert",
-						"upsertSettings": {
-							"useTempDB": true,
-							"keys": [
-								"id"
-							]
-						},
-						"sqlWriterUseTableLock": false,
-						"disableMetricsCollection": false
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
 					},
 					"enableStaging": false,
 					"translator": {
@@ -69,6 +62,15 @@
 								"sink": {
 									"name": "projectnr",
 									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['WorkDate']"
+								},
+								"sink": {
+									"name": "workdate",
+									"type": "DateTime"
 								}
 							},
 							{
@@ -124,10 +126,19 @@
 									"name": "employeenr",
 									"type": "Int64"
 								}
+							},
+							{
+								"source": {
+									"path": "['Comment']"
+								},
+								"sink": {
+									"name": "comment",
+									"type": "String"
+								}
 							}
 						],
 						"collectionReference": "$['response']",
-						"mapComplexValuesToString": false
+						"mapComplexValuesToString": true
 					}
 				},
 				"inputs": [
