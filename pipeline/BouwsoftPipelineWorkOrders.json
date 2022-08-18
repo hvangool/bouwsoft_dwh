@@ -64,6 +64,42 @@
 									"name": "projectnr",
 									"type": "String"
 								}
+							},
+							{
+								"source": {
+									"path": "['WorkDate']"
+								},
+								"sink": {
+									"name": "workdate",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"path": "['CustomerName']"
+								},
+								"sink": {
+									"name": "customertname",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['CustomerStreet']"
+								},
+								"sink": {
+									"name": "customerstreet",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['CustomerCity']"
+								},
+								"sink": {
+									"name": "customercity",
+									"type": "String"
+								}
 							}
 						],
 						"collectionReference": "$['response']",
