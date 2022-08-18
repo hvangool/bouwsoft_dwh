@@ -1,0 +1,16 @@
+{
+	"name": "RestResourceBouwsoftWorkOrders",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "RestServiceOutsmart",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"typeProperties": {
+			"relativeUrl": "GetWorkorders?key=CreationDate&value=2022-01-01&operator=ge&status=Afgehandeld"
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
