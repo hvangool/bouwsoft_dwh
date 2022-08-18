@@ -94,15 +94,6 @@
 							},
 							{
 								"source": {
-									"path": "['WorkDescription']"
-								},
-								"sink": {
-									"name": "workdescription",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
 									"path": "['status']"
 								},
 								"sink": {
