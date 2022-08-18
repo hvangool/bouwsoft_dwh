@@ -18,6 +18,10 @@
 		"RestServiceBouwsoftAccessToken_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://charon.bouwsoft.be/api/v1/Authorize/AccessToken"
+		},
+		"RestServiceOutsmart_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://office.out-smart.com/openapi/8/"
 		}
 	},
 	"variables": {
@@ -2047,6 +2051,243 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/BouwsoftPipelineWorkOrders')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy WorkOrders",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Lookup Parameters",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET"
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false,
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "[['id']"
+										},
+										"sink": {
+											"name": "id",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"path": "[['OrderNr']"
+										},
+										"sink": {
+											"name": "ordernr",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['ProjectNr']"
+										},
+										"sink": {
+											"name": "projectnr",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['WorkDate']"
+										},
+										"sink": {
+											"name": "workdate",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"path": "[['CustomerName']"
+										},
+										"sink": {
+											"name": "customertname",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['CustomerStreet']"
+										},
+										"sink": {
+											"name": "customerstreet",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['CustomerCity']"
+										},
+										"sink": {
+											"name": "customercity",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['WorkDescription']"
+										},
+										"sink": {
+											"name": "workdescription",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['status']"
+										},
+										"sink": {
+											"name": "status",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['EmployeeNr']"
+										},
+										"sink": {
+											"name": "employeenr",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"path": "[['WorkDuration']"
+										},
+										"sink": {
+											"name": "workduration",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"path": "[['Comment']"
+										},
+										"sink": {
+											"name": "comment",
+											"type": "String"
+										}
+									}
+								],
+								"collectionReference": "$['response']",
+								"mapComplexValuesToString": false
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "RestResourceBouwsoftWorkOrders",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "AzureSqlWorkOrders",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Truncate WorkOrders",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[Truncate_WorkOrders]"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureSqlDatabase",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Lookup Parameters",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Truncate WorkOrders",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "AzureSqlParameters",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-04-13T12:07:55Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/RestResourceBouwsoftWorkOrders')]",
+				"[concat(variables('factoryId'), '/datasets/AzureSqlWorkOrders')]",
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase')]",
+				"[concat(variables('factoryId'), '/datasets/AzureSqlParameters')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/General')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -2233,6 +2474,27 @@
 							"waitOnCompletion": true,
 							"parameters": {}
 						}
+					},
+					{
+						"name": "BouwsoftPipelineWorkOrders",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "BouwsoftPipelinePurchaseInvoiceProjects",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "BouwsoftPipelineWorkOrders",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
 					}
 				],
 				"policy": {
@@ -2251,7 +2513,8 @@
 				"[concat(variables('factoryId'), '/pipelines/BouwsoftPipelinePurchaseInvoices')]",
 				"[concat(variables('factoryId'), '/pipelines/BouwsoftPipelineSalesInvoices')]",
 				"[concat(variables('factoryId'), '/pipelines/BouwsoftPipelineActualCostItems')]",
-				"[concat(variables('factoryId'), '/pipelines/BouwsoftPipelinePurchaseInvoiceProjects')]"
+				"[concat(variables('factoryId'), '/pipelines/BouwsoftPipelinePurchaseInvoiceProjects')]",
+				"[concat(variables('factoryId'), '/pipelines/BouwsoftPipelineWorkOrders')]"
 			]
 		},
 		{
@@ -2747,6 +3010,87 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/AzureSqlWorkOrders')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "id",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "ordernr",
+						"type": "nvarchar"
+					},
+					{
+						"name": "projectnr",
+						"type": "nvarchar"
+					},
+					{
+						"name": "workdate",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "customertname",
+						"type": "nvarchar"
+					},
+					{
+						"name": "customercity",
+						"type": "nvarchar"
+					},
+					{
+						"name": "customerstreet",
+						"type": "nvarchar"
+					},
+					{
+						"name": "creationdate",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "status",
+						"type": "nvarchar"
+					},
+					{
+						"name": "employeenr",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "workdescription",
+						"type": "nvarchar"
+					},
+					{
+						"name": "comment",
+						"type": "nvarchar"
+					},
+					{
+						"name": "workduration",
+						"type": "bigint",
+						"precision": 19
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "WorkOrders"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/RestResourceAccessToken')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -2925,6 +3269,26 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/RestResourceBouwsoftWorkOrders')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "RestServiceOutsmart",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": "GetWorkorders?key=CreationDate&value=2022-08-01&operator=ge&status=Afgehandeld&token=148af45b01225b21e3576967dd0a42b3&software_token=ac0447ccbba1c0ae31f10d59084a03e3fe3c76a4"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/RestServiceOutsmart')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/AzureSqlDatabase')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -2968,36 +3332,25 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/AutoResolveIntegrationRuntime')]",
-			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"name": "[concat(parameters('factoryName'), '/RestServiceOutsmart')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"type": "Managed",
+				"annotations": [],
+				"type": "RestService",
 				"typeProperties": {
-					"computeProperties": {
-						"location": "AutoResolve",
-						"dataFlowProperties": {
-							"computeType": "General",
-							"coreCount": 8,
-							"timeToLive": 0
-						}
-					}
+					"url": "[parameters('RestServiceOutsmart_properties_typeProperties_url')]",
+					"enableServerCertificateValidation": true,
+					"authenticationType": "Anonymous"
 				},
-				"managedVirtualNetwork": {
-					"type": "ManagedVirtualNetworkReference",
-					"referenceName": "default"
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/managedVirtualNetworks/default')]"
+				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
 			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/default')]",
-			"type": "Microsoft.DataFactory/factories/managedVirtualNetworks",
-			"apiVersion": "2018-06-01",
-			"properties": {},
-			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/refreshBouwsoftDataWarehouse')]",
@@ -3036,6 +3389,42 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/pipelines/General')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AutoResolveIntegrationRuntime')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "Managed",
+				"typeProperties": {
+					"computeProperties": {
+						"location": "AutoResolve",
+						"dataFlowProperties": {
+							"computeType": "General",
+							"coreCount": 8,
+							"timeToLive": 0,
+							"cleanup": true
+						},
+						"pipelineExternalComputeScaleProperties": {
+							"timeToLive": 60
+						}
+					}
+				},
+				"managedVirtualNetwork": {
+					"type": "ManagedVirtualNetworkReference",
+					"referenceName": "default"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/managedVirtualNetworks/default')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/default')]",
+			"type": "Microsoft.DataFactory/factories/managedVirtualNetworks",
+			"apiVersion": "2018-06-01",
+			"properties": {},
+			"dependsOn": []
 		}
 	]
 }

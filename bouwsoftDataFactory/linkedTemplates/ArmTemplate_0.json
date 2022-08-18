@@ -567,6 +567,87 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/AzureSqlWorkOrders')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "id",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "ordernr",
+						"type": "nvarchar"
+					},
+					{
+						"name": "projectnr",
+						"type": "nvarchar"
+					},
+					{
+						"name": "workdate",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "customertname",
+						"type": "nvarchar"
+					},
+					{
+						"name": "customercity",
+						"type": "nvarchar"
+					},
+					{
+						"name": "customerstreet",
+						"type": "nvarchar"
+					},
+					{
+						"name": "creationdate",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "status",
+						"type": "nvarchar"
+					},
+					{
+						"name": "employeenr",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "workdescription",
+						"type": "nvarchar"
+					},
+					{
+						"name": "comment",
+						"type": "nvarchar"
+					},
+					{
+						"name": "workduration",
+						"type": "bigint",
+						"precision": 19
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "WorkOrders"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/RestResourceAccessToken')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -677,26 +758,6 @@
 				"type": "RestResource",
 				"typeProperties": {
 					"relativeUrl": "PurchaseInvoiceProjects?columns=id|purchaseinvoice_id|purchaseinvoice_nr|address_supplier_id|project_id|actualcostitem_id|amount&limit=500&offset={offset}&sort=id"
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/RestServiceBouwsoft')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/RestResourceBouwsoftPurchaseInvoices')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "RestServiceBouwsoft",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "RestResource",
-				"typeProperties": {
-					"relativeUrl": "PurchaseInvoices?filter=date gt '1900-01-01'&columns=id|company_id|date|nr_supplier|address_id|basis1|basis2|basis3|basis4|basis5&limit=500&offset={offset}&sort=id"
 				},
 				"schema": []
 			},

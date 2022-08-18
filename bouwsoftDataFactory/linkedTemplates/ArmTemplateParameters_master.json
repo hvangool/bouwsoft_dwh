@@ -14,6 +14,9 @@
 		"RestServiceBouwsoftAccessToken_properties_typeProperties_url": {
 			"value": "https://charon.bouwsoft.be/api/v1/Authorize/AccessToken"
 		},
+		"RestServiceOutsmart_properties_typeProperties_url": {
+			"value": "https://office.out-smart.com/openapi/8/"
+		},
 		"containerUri": {
 			"value": ""
 		},
