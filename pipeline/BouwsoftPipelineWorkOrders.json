@@ -151,15 +151,6 @@
 									"name": "comment",
 									"type": "String"
 								}
-							},
-							{
-								"source": {
-									"path": "['WorkDuration']"
-								},
-								"sink": {
-									"name": "workduration",
-									"type": "Int64"
-								}
 							}
 						],
 						"collectionReference": "$['response']",
