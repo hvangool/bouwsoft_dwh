@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy WorkOrders",
+				"name": "Copy Employees",
 				"type": "Copy",
 				"dependsOn": [
 					{
@@ -46,7 +46,7 @@
 						"mappings": [
 							{
 								"source": {
-									"path": "['id']"
+									"path": "['number']"
 								},
 								"sink": {
 									"name": "id",
@@ -55,91 +55,19 @@
 							},
 							{
 								"source": {
-									"path": "['OrderNr']"
+									"path": "['lastname']"
 								},
 								"sink": {
-									"name": "ordernr",
+									"name": "lastname",
 									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"path": "['ProjectNr']"
+									"path": "['firstname']"
 								},
 								"sink": {
-									"name": "projectnr",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['WorkDate']"
-								},
-								"sink": {
-									"name": "workdate",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['CustomerName']"
-								},
-								"sink": {
-									"name": "customertname",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['CustomerStreet']"
-								},
-								"sink": {
-									"name": "customerstreet",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['CustomerCity']"
-								},
-								"sink": {
-									"name": "customercity",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['WorkDescription']"
-								},
-								"sink": {
-									"name": "workdescription",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['CreationDate']"
-								},
-								"sink": {
-									"name": "creationdate",
-									"type": "DateTime"
-								}
-							},
-							{
-								"source": {
-									"path": "['EmployeeNr']"
-								},
-								"sink": {
-									"name": "employeenr",
-									"type": "Int64"
-								}
-							},
-							{
-								"source": {
-									"path": "['status']"
-								},
-								"sink": {
-									"name": "status",
+									"name": "firstname",
 									"type": "String"
 								}
 							}
@@ -150,13 +78,13 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "RestResourceOutsmartWorkOrders",
+						"referenceName": "RestResourceOutsmartEmployees",
 						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "AzureSqlWorkOrders",
+						"referenceName": "AzureSqlEmployees",
 						"type": "DatasetReference"
 					}
 				]
