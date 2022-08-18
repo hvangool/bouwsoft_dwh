@@ -180,7 +180,7 @@
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
-						"activity": "BouwsoftPipelinePurchaseInvoiceProjects",
+						"activity": "BouwsoftPipelineEmployees",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -190,6 +190,26 @@
 				"typeProperties": {
 					"pipeline": {
 						"referenceName": "BouwsoftPipelineWorkOrders",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "BouwsoftPipelineEmployees",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "BouwsoftPipelinePurchaseInvoiceProjects",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "BouwsoftPipelineEmployees",
 						"type": "PipelineReference"
 					},
 					"waitOnCompletion": true
