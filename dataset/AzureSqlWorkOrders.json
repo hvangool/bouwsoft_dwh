@@ -7,65 +7,7 @@
 		},
 		"annotations": [],
 		"type": "AzureSqlTable",
-		"schema": [
-			{
-				"name": "id",
-				"type": "bigint",
-				"precision": 19
-			},
-			{
-				"name": "ordernr",
-				"type": "nvarchar"
-			},
-			{
-				"name": "projectnr",
-				"type": "nvarchar"
-			},
-			{
-				"name": "workdate",
-				"type": "nvarchar"
-			},
-			{
-				"name": "customertname",
-				"type": "nvarchar"
-			},
-			{
-				"name": "customercity",
-				"type": "nvarchar"
-			},
-			{
-				"name": "customerstreet",
-				"type": "nvarchar"
-			},
-			{
-				"name": "creationdate",
-				"type": "datetime",
-				"precision": 23,
-				"scale": 3
-			},
-			{
-				"name": "status",
-				"type": "nvarchar"
-			},
-			{
-				"name": "employeenr",
-				"type": "bigint",
-				"precision": 19
-			},
-			{
-				"name": "workdescription",
-				"type": "nvarchar"
-			},
-			{
-				"name": "comment",
-				"type": "nvarchar"
-			},
-			{
-				"name": "workduration",
-				"type": "bigint",
-				"precision": 19
-			}
-		],
+		"schema": [],
 		"typeProperties": {
 			"schema": "dbo",
 			"table": "WorkOrders"
