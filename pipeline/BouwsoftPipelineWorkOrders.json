@@ -73,6 +73,15 @@
 							},
 							{
 								"source": {
+									"path": "['WorkDate']"
+								},
+								"sink": {
+									"name": "workdate",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
 									"path": "['CustomerName']"
 								},
 								"sink": {
@@ -114,6 +123,15 @@
 								"sink": {
 									"name": "status",
 									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['EmployeeNr']"
+								},
+								"sink": {
+									"name": "employeenr",
+									"type": "Int64"
 								}
 							}
 						],
