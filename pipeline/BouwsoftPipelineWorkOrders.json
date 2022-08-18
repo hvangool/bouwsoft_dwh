@@ -40,7 +40,22 @@
 						"mappings": [
 							{
 								"source": {
-									"path": "['id']"
+									"path": "$['code']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['messages'][0]"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['WorksheetCode']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['id']"
 								},
 								"sink": {
 									"name": "id",
@@ -49,69 +64,493 @@
 							},
 							{
 								"source": {
-									"path": "['clientnr']"
+									"path": "$['response'][0]['OrderNr']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['JobNr']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['WorkorderNo']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['Reference']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['ExternalReference']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['ProjectNr']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['ProjectActivityNr']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['WorkDate']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['WorkTime']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['WorkEndDate']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['WorkEndTime']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['ExternProjectNr']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['CustomerName']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['CustomerDebtorNr']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['CustomerStreet']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['CustomerStreetNo']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['CustomerEmail']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['CustomerZIP']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['CustomerCity']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['CustomerCountry']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['CustomerContactPerson']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['CustomerPhone']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['CustomerRemark']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['CustomerLatitude']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['CustomerLongitude']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['CustomerNameInvoice']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['CustomerDebtorNrInvoice']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['CustomerStreetInvoice']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['CustomerStreetNoInvoice']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['CustomerEmailInvoice']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['CustomerZIPInvoice']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['CustomerCityInvoice']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['CustomerCountryInvoice']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['CustomerContactPersonInvoice']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['CustomerPhoneInvoice']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['CustomerRemarkInvoice']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['TypeOfWork']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['WorkDescription']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['PaymentMethod']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['CreationDate']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['Signature']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['UDID']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['status']"
 								},
 								"sink": {
-									"name": "clientnr",
+									"name": "status",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['EmployeeNr']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['Archived']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['WorkFinished']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['InternalWorkDescription']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['WorkDeadline']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['WorkDuration']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['WorkStatus']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['PickupPlanning']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['WebPlanning']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['CpnCode']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['AdrCode']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['CpnCodeInvoice']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['ShortWorkDescription']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['Comment']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['ErrorCode']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['ErrorMessage']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['SolutionCode']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['SolutionMessage']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['MinimumHours']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['RoundingAmount']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['PriorityCode']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['PriorityMessage']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['SignatureContactperson']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['PgpCode']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['Accountmanager']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['ContractNumber']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['SlaCode']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['MutationDate']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['Photos'][0]"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['Workperiods'][0]['id']"
+								},
+								"sink": {
+									"name": "id",
 									"type": "Int64"
 								}
 							},
 							{
 								"source": {
-									"path": "['suppliernr']"
-								},
-								"sink": {
-									"name": "suppliernr",
-									"type": "Int64"
+									"path": "$['response'][0]['Workperiods'][0]['BeginTime']"
 								}
 							},
 							{
 								"source": {
-									"path": "['name']"
+									"path": "$['response'][0]['Workperiods'][0]['TotalTime']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['Workperiods'][0]['WorkRemark']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['Workperiods'][0]['WorkDate']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['Workperiods'][0]['EndTime']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['Workperiods'][0]['Travel']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['Workperiods'][0]['HourType']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['Workperiods'][0]['EmployeeNr']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['Workperiods'][0]['Break']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['Workperiods'][0]['ObjCode']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['Workperiods'][0]['ExternalId']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['Materials'][0]"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['Documents'][0]"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['Forms'][0]"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['WorkObjects'][0]"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['StatusChanges'][0]['status']"
 								},
 								"sink": {
-									"name": "name",
+									"name": "status",
 									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"path": "['address']"
-								},
-								"sink": {
-									"name": "address",
-									"type": "String"
+									"path": "$['response'][0]['StatusChanges'][0]['timestamp']"
 								}
 							},
 							{
 								"source": {
-									"path": "['countrycode']"
-								},
-								"sink": {
-									"name": "countrycode",
-									"type": "String"
+									"path": "$['response'][0]['StatusChanges'][0]['user']"
 								}
 							},
 							{
 								"source": {
-									"path": "['zipcode']"
-								},
-								"sink": {
-									"name": "zipcode",
-									"type": "String"
+									"path": "$['response'][0]['FreeFields']"
 								}
 							},
 							{
 								"source": {
-									"path": "['city']"
-								},
-								"sink": {
-									"name": "city",
-									"type": "String"
+									"path": "$['response'][0]['SignatureUrl']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['PdfUrl']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['response'][0]['WordUrl']"
 								}
 							}
 						],
-						"collectionReference": "$['Records']",
+						"collectionReference": "$['messages']",
 						"mapComplexValuesToString": false
 					}
 				},
@@ -123,7 +562,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "AzureSqlAddresses",
+						"referenceName": "AzureSqlWorkOrders",
 						"type": "DatasetReference"
 					}
 				]

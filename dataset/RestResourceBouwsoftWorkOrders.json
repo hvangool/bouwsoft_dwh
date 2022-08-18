@@ -8,7 +8,7 @@
 		"annotations": [],
 		"type": "RestResource",
 		"typeProperties": {
-			"relativeUrl": "GetWorkorders?key=CreationDate&value=2022-01-01&operator=ge&status=Afgehandeld&token=148af45b01225b21e3576967dd0a42b3&software_token=ac0447ccbba1c0ae31f10d59084a03e3fe3c76a4"
+			"relativeUrl": "GetWorkorders?key=CreationDate&value=2022-08-01&operator=ge&status=Afgehandeld&token=148af45b01225b21e3576967dd0a42b3&software_token=ac0447ccbba1c0ae31f10d59084a03e3fe3c76a4"
 		},
 		"schema": []
 	},
