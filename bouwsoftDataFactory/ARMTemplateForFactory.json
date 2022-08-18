@@ -2084,7 +2084,13 @@
 							},
 							"sink": {
 								"type": "AzureSqlSink",
-								"writeBehavior": "insert",
+								"writeBehavior": "upsert",
+								"upsertSettings": {
+									"useTempDB": true,
+									"keys": [
+										"id"
+									]
+								},
 								"sqlWriterUseTableLock": false,
 								"disableMetricsCollection": false
 							},
@@ -2121,15 +2127,6 @@
 									},
 									{
 										"source": {
-											"path": "[['WorkDate']"
-										},
-										"sink": {
-											"name": "workdate",
-											"type": "DateTime"
-										}
-									},
-									{
-										"source": {
 											"path": "[['CustomerName']"
 										},
 										"sink": {
@@ -2152,6 +2149,15 @@
 										},
 										"sink": {
 											"name": "customercity",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "[['WorkDescription']"
+										},
+										"sink": {
+											"name": "workdescription",
 											"type": "String"
 										}
 									},
