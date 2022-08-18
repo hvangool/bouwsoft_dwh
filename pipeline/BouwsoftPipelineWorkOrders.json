@@ -151,6 +151,14 @@
 									"name": "employee_id",
 									"type": "Int64"
 								}
+							},
+							{
+								"source": {
+									"path": "['Comment']"
+								},
+								"sink": {
+									"name": "comment"
+								}
 							}
 						],
 						"collectionReference": "$['response']",
