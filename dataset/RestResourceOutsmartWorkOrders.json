@@ -1,5 +1,5 @@
 {
-	"name": "RestResourceBouwsoftWorkOrders",
+	"name": "RestResourceOutsmartWorkOrders",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "RestServiceOutsmart",
