@@ -3536,10 +3536,19 @@
 					"referenceName": "RestServiceOutsmart",
 					"type": "LinkedServiceReference"
 				},
+				"parameters": {
+					"batch": {
+						"type": "string",
+						"defaultValue": "00"
+					}
+				},
 				"annotations": [],
 				"type": "RestResource",
 				"typeProperties": {
-					"relativeUrl": "GetWorkorders?key[]=OrderNr&value[]=WB0{offset}%&operator[]=li&key[]=EmployeeNr&value[]=0&operator[]=gt&token=148af45b01225b21e3576967dd0a42b3&software_token=ac0447ccbba1c0ae31f10d59084a03e3fe3c76a4"
+					"relativeUrl": {
+						"value": "concat('GetWorkorders?key[]=OrderNr&value[]=WB',dataset().batch,'%&operator[]=li&key[]=EmployeeNr&value[]=0&operator[]=gt&token=148af45b01225b21e3576967dd0a42b3&software_token=ac0447ccbba1c0ae31f10d59084a03e3fe3c76a4')\n",
+						"type": "Expression"
+					}
 				},
 				"schema": []
 			},
@@ -3731,7 +3740,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"items": {
-								"value": "@range(0,99)",
+								"value": "@range(0,2)",
 								"type": "Expression"
 							},
 							"isSequential": true,
@@ -3755,10 +3764,7 @@
 											"requestInterval": "00.00:00:00.010",
 											"requestMethod": "GET",
 											"paginationRules": {
-												"AbsoluteUrl.{offset}": {
-													"value": "@item()",
-													"type": "Expression"
-												}
+												"AbsoluteUrl.{offset}": "RANGE:0:2:1"
 											}
 										},
 										"sink": {
