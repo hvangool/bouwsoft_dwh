@@ -52,14 +52,13 @@
 						"userProperties": [],
 						"typeProperties": {
 							"items": {
-								"value": "counter",
+								"value": "@range(0,99)",
 								"type": "Expression"
 							},
-							"isSequential": false,
-							"batchCount": 9,
+							"isSequential": true,
 							"activities": [
 								{
-									"name": "Copy WorkOrders_copy1",
+									"name": "Copy WorkOrders",
 									"type": "Copy",
 									"dependsOn": [],
 									"policy": {
@@ -77,8 +76,10 @@
 											"requestInterval": "00.00:00:00.010",
 											"requestMethod": "GET",
 											"paginationRules": {
-												"QueryParameters.{offset}": "RANGE:0:9:1",
-												"AbsoluteUrl.{batch}": "RANGE:0:1:1"
+												"AbsoluteUrl.{offset}": {
+													"value": "@item()",
+													"type": "Expression"
+												}
 											}
 										},
 										"sink": {
@@ -241,6 +242,11 @@
 				"policy": {
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
+				},
+				"variables": {
+					"counter": {
+						"type": "Array"
+					}
 				},
 				"annotations": [],
 				"lastPublishTime": "2022-04-13T12:07:55Z"
