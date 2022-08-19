@@ -3539,14 +3539,14 @@
 				"parameters": {
 					"batch": {
 						"type": "string",
-						"defaultValue": "00"
+						"defaultValue": "0"
 					}
 				},
 				"annotations": [],
 				"type": "RestResource",
 				"typeProperties": {
 					"relativeUrl": {
-						"value": "concat('GetWorkorders?key[]=OrderNr&value[]=WB',dataset().batch,'%&operator[]=li&key[]=EmployeeNr&value[]=0&operator[]=gt&token=148af45b01225b21e3576967dd0a42b3&software_token=ac0447ccbba1c0ae31f10d59084a03e3fe3c76a4')\n",
+						"value": "concat('GetWorkorders?key[]=OrderNr&value[]=WB0',dataset().batch,'%&operator[]=li&key[]=EmployeeNr&value[]=0&operator[]=gt&token=148af45b01225b21e3576967dd0a42b3&software_token=ac0447ccbba1c0ae31f10d59084a03e3fe3c76a4')\n",
 						"type": "Expression"
 					}
 				},
@@ -3762,10 +3762,7 @@
 											"type": "RestSource",
 											"httpRequestTimeout": "00:10:00",
 											"requestInterval": "00.00:00:00.010",
-											"requestMethod": "GET",
-											"paginationRules": {
-												"AbsoluteUrl.{offset}": "RANGE:0:2:1"
-											}
+											"requestMethod": "GET"
 										},
 										"sink": {
 											"type": "AzureSqlSink",
@@ -3909,7 +3906,12 @@
 										{
 											"referenceName": "RestResourceOutsmartWorkOrders",
 											"type": "DatasetReference",
-											"parameters": {}
+											"parameters": {
+												"batch": {
+													"value": "@item()",
+													"type": "Expression"
+												}
+											}
 										}
 									],
 									"outputs": [

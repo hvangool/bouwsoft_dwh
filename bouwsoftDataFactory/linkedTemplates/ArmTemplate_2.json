@@ -74,10 +74,7 @@
 											"type": "RestSource",
 											"httpRequestTimeout": "00:10:00",
 											"requestInterval": "00.00:00:00.010",
-											"requestMethod": "GET",
-											"paginationRules": {
-												"AbsoluteUrl.{offset}": "RANGE:0:2:1"
-											}
+											"requestMethod": "GET"
 										},
 										"sink": {
 											"type": "AzureSqlSink",
@@ -221,7 +218,12 @@
 										{
 											"referenceName": "RestResourceOutsmartWorkOrders",
 											"type": "DatasetReference",
-											"parameters": {}
+											"parameters": {
+												"batch": {
+													"value": "@item()",
+													"type": "Expression"
+												}
+											}
 										}
 									],
 									"outputs": [
