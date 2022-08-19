@@ -241,10 +241,7 @@
 									"referenceName": "RestResourceOutsmartWorkOrders",
 									"type": "DatasetReference",
 									"parameters": {
-										"batch": {
-											"value": "@substring(concat('0',item()),0,2)",
-											"type": "Expression"
-										}
+										"batch": "@if(greater(item(),9),string(item()),concat('0',string(item())))"
 									}
 								}
 							],
@@ -262,7 +259,7 @@
 							"userProperties": [],
 							"typeProperties": {
 								"variableName": "counter",
-								"value": "@substring(concat('0',item()),0,2)"
+								"value": "@if(greater(item(),9),string(item()),concat('0',string(item())))"
 							}
 						}
 					]
