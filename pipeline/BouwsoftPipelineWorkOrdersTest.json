@@ -3,187 +3,6 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy WorkOrders",
-				"type": "Copy",
-				"dependsOn": [
-					{
-						"activity": "Lookup Parameters",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "RestSource",
-						"httpRequestTimeout": "00:10:00",
-						"requestInterval": "00.00:00:00.010",
-						"requestMethod": "GET",
-						"paginationRules": {
-							"QueryParameters.{offset}": "RANGE:0:9:1",
-							"AbsoluteUrl.{batch}": "RANGE:0:1:1"
-						}
-					},
-					"sink": {
-						"type": "AzureSqlSink",
-						"writeBehavior": "upsert",
-						"upsertSettings": {
-							"useTempDB": true,
-							"keys": [
-								"id"
-							]
-						},
-						"sqlWriterUseTableLock": false,
-						"disableMetricsCollection": false
-					},
-					"enableStaging": false,
-					"translator": {
-						"type": "TabularTranslator",
-						"mappings": [
-							{
-								"source": {
-									"path": "['id']"
-								},
-								"sink": {
-									"name": "id",
-									"type": "Int64"
-								}
-							},
-							{
-								"source": {
-									"path": "['OrderNr']"
-								},
-								"sink": {
-									"name": "ordernr",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['ProjectNr']"
-								},
-								"sink": {
-									"name": "projectnr",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['WorkDate']"
-								},
-								"sink": {
-									"name": "workdate",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['CustomerName']"
-								},
-								"sink": {
-									"name": "customertname",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['CustomerStreet']"
-								},
-								"sink": {
-									"name": "customerstreet",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['CustomerZIP']"
-								},
-								"sink": {
-									"name": "customerzip",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['CustomerCity']"
-								},
-								"sink": {
-									"name": "customercity",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['WorkDescription']"
-								},
-								"sink": {
-									"name": "workdescription",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['CreationDate']"
-								},
-								"sink": {
-									"name": "creationdate",
-									"type": "DateTime"
-								}
-							},
-							{
-								"source": {
-									"path": "['status']"
-								},
-								"sink": {
-									"name": "status",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['EmployeeNr']"
-								},
-								"sink": {
-									"name": "employee_id",
-									"type": "Int64"
-								}
-							},
-							{
-								"source": {
-									"path": "['WorkDuration']"
-								},
-								"sink": {
-									"name": "workduration",
-									"type": "Int64"
-								}
-							}
-						],
-						"collectionReference": "$['response']",
-						"mapComplexValuesToString": true
-					}
-				},
-				"inputs": [
-					{
-						"referenceName": "RestResourceOutsmartWorkOrders",
-						"type": "DatasetReference"
-					}
-				],
-				"outputs": [
-					{
-						"referenceName": "AzureSqlWorkOrders",
-						"type": "DatasetReference"
-					}
-				]
-			},
-			{
 				"name": "Truncate WorkOrders",
 				"type": "SqlServerStoredProcedure",
 				"dependsOn": [],
@@ -204,8 +23,8 @@
 				}
 			},
 			{
-				"name": "Lookup Parameters",
-				"type": "Lookup",
+				"name": "ForEach",
+				"type": "ForEach",
 				"dependsOn": [
 					{
 						"activity": "Truncate WorkOrders",
@@ -214,24 +33,190 @@
 						]
 					}
 				],
-				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
 				"userProperties": [],
 				"typeProperties": {
-					"source": {
-						"type": "AzureSqlSource",
-						"queryTimeout": "02:00:00",
-						"partitionOption": "None"
+					"items": {
+						"value": "counter",
+						"type": "Expression"
 					},
-					"dataset": {
-						"referenceName": "AzureSqlParameters",
-						"type": "DatasetReference"
-					}
+					"isSequential": false,
+					"batchCount": 9,
+					"activities": [
+						{
+							"name": "Copy WorkOrders_copy1",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "RestSource",
+									"httpRequestTimeout": "00:10:00",
+									"requestInterval": "00.00:00:00.010",
+									"requestMethod": "GET",
+									"paginationRules": {
+										"QueryParameters.{offset}": "RANGE:0:9:1",
+										"AbsoluteUrl.{batch}": "RANGE:0:1:1"
+									}
+								},
+								"sink": {
+									"type": "AzureSqlSink",
+									"writeBehavior": "upsert",
+									"upsertSettings": {
+										"useTempDB": true,
+										"keys": [
+											"id"
+										]
+									},
+									"sqlWriterUseTableLock": false,
+									"disableMetricsCollection": false
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"mappings": [
+										{
+											"source": {
+												"path": "['id']"
+											},
+											"sink": {
+												"name": "id",
+												"type": "Int64"
+											}
+										},
+										{
+											"source": {
+												"path": "['OrderNr']"
+											},
+											"sink": {
+												"name": "ordernr",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"path": "['ProjectNr']"
+											},
+											"sink": {
+												"name": "projectnr",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"path": "['WorkDate']"
+											},
+											"sink": {
+												"name": "workdate",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"path": "['CustomerName']"
+											},
+											"sink": {
+												"name": "customertname",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"path": "['CustomerStreet']"
+											},
+											"sink": {
+												"name": "customerstreet",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"path": "['CustomerZIP']"
+											},
+											"sink": {
+												"name": "customerzip",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"path": "['CustomerCity']"
+											},
+											"sink": {
+												"name": "customercity",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"path": "['WorkDescription']"
+											},
+											"sink": {
+												"name": "workdescription",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"path": "['CreationDate']"
+											},
+											"sink": {
+												"name": "creationdate",
+												"type": "DateTime"
+											}
+										},
+										{
+											"source": {
+												"path": "['status']"
+											},
+											"sink": {
+												"name": "status",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"path": "['EmployeeNr']"
+											},
+											"sink": {
+												"name": "employee_id",
+												"type": "Int64"
+											}
+										},
+										{
+											"source": {
+												"path": "['WorkDuration']"
+											},
+											"sink": {
+												"name": "workduration",
+												"type": "Int64"
+											}
+										}
+									],
+									"collectionReference": "$['response']",
+									"mapComplexValuesToString": true
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "RestResourceOutsmartWorkOrders",
+									"type": "DatasetReference"
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "AzureSqlWorkOrders",
+									"type": "DatasetReference"
+								}
+							]
+						}
+					]
 				}
 			}
 		],
