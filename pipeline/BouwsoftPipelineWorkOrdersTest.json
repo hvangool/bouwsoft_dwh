@@ -56,18 +56,12 @@
 							"typeProperties": {
 								"source": {
 									"type": "RestSource",
-									"additionalColumns": [
-										{
-											"name": "{offset}",
-											"value": {
-												"value": "@item()",
-												"type": "Expression"
-											}
-										}
-									],
 									"httpRequestTimeout": "00:10:00",
 									"requestInterval": "00.00:00:00.010",
-									"requestMethod": "GET"
+									"requestMethod": "GET",
+									"paginationRules": {
+										"AbsoluteUrl.{offset}": "RANGE:0:2:1"
+									}
 								},
 								"sink": {
 									"type": "AzureSqlSink",
