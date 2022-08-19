@@ -1718,7 +1718,7 @@
 									}
 								},
 								"paginationRules": {
-									"AbsoluteUrl.{offset}": "RANGE:0:10000:500"
+									"AbsoluteUrl.{offset}": "RANGE:0:100000:500"
 								}
 							},
 							"sink": {
@@ -2242,7 +2242,10 @@
 								"type": "RestSource",
 								"httpRequestTimeout": "00:01:40",
 								"requestInterval": "00.00:00:00.010",
-								"requestMethod": "GET"
+								"requestMethod": "GET",
+								"paginationRules": {
+									"AbsoluteUrl.{offset}": "RANGE:00:99:1"
+								}
 							},
 							"sink": {
 								"type": "AzureSqlSink",
@@ -3536,7 +3539,7 @@
 				"annotations": [],
 				"type": "RestResource",
 				"typeProperties": {
-					"relativeUrl": "GetWorkorders?key=CreationDate&value=2022-08-01&operator=ge&status=Afgehandeld&token=148af45b01225b21e3576967dd0a42b3&software_token=ac0447ccbba1c0ae31f10d59084a03e3fe3c76a4"
+					"relativeUrl": "GetWorkorders?key=OrderNr&value=WB{offset}%&operator=li&token=148af45b01225b21e3576967dd0a42b3&software_token=ac0447ccbba1c0ae31f10d59084a03e3fe3c76a4"
 				},
 				"schema": []
 			},
@@ -3568,9 +3571,15 @@
 					"url": "[parameters('RestServiceBouwsoft_properties_typeProperties_url')]",
 					"enableServerCertificateValidation": true,
 					"authenticationType": "Anonymous"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/RestServiceBouwsoftAccessToken')]",

@@ -53,11 +53,14 @@
 					"AzureSqlDatabase_connectionString": {
 						"value": "[parameters('AzureSqlDatabase_connectionString')]"
 					},
+					"RestServiceBouwsoftAccessToken_properties_typeProperties_url": {
+						"value": "[parameters('RestServiceBouwsoftAccessToken_properties_typeProperties_url')]"
+					},
 					"RestServiceBouwsoft_properties_typeProperties_url": {
 						"value": "[parameters('RestServiceBouwsoft_properties_typeProperties_url')]"
 					},
-					"RestServiceBouwsoftAccessToken_properties_typeProperties_url": {
-						"value": "[parameters('RestServiceBouwsoftAccessToken_properties_typeProperties_url')]"
+					"RestServiceOutsmart_properties_typeProperties_url": {
+						"value": "[parameters('RestServiceOutsmart_properties_typeProperties_url')]"
 					}
 				}
 			},
@@ -76,9 +79,6 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
-					},
-					"RestServiceOutsmart_properties_typeProperties_url": {
-						"value": "[parameters('RestServiceOutsmart_properties_typeProperties_url')]"
 					}
 				}
 			},
