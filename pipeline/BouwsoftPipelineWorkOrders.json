@@ -29,7 +29,7 @@
 						"requestMethod": "GET",
 						"paginationRules": {
 							"QueryParameters.{offset}": "RANGE:0:9:1",
-							"QueryParameters.{batch}": "RANGE:0:1:1"
+							"AbsoluteUrl.{batch}": "RANGE:0:1:1"
 						}
 					},
 					"sink": {
