@@ -79,7 +79,7 @@
 							"userProperties": [],
 							"typeProperties": {
 								"variableName": "counter",
-								"value": "@substring(concat('0',item()),0,2)"
+								"value": "@substring(concat('0',item()),-2,2)"
 							}
 						}
 					]
