@@ -36,11 +36,10 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "counter",
+						"value": "@range(0,99)",
 						"type": "Expression"
 					},
-					"isSequential": false,
-					"batchCount": 9,
+					"isSequential": true,
 					"activities": [
 						{
 							"name": "Copy WorkOrders",
@@ -222,6 +221,11 @@
 				}
 			}
 		],
+		"variables": {
+			"counter": {
+				"type": "Array"
+			}
+		},
 		"annotations": [],
 		"lastPublishTime": "2022-04-13T12:07:55Z"
 	},
