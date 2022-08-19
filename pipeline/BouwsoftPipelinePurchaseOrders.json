@@ -36,7 +36,7 @@
 							}
 						},
 						"paginationRules": {
-							"AbsoluteUrl.{offset}": "RANGE:0:10000:500"
+							"AbsoluteUrl.{offset}": "RANGE:0:100000:500"
 						}
 					},
 					"sink": {
