@@ -75,7 +75,14 @@
 						{
 							"name": "Copy WorkOrders",
 							"type": "Copy",
-							"dependsOn": [],
+							"dependsOn": [
+								{
+									"activity": "Set variable Counter",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
 							"policy": {
 								"timeout": "7.00:00:00",
 								"retry": 0,
@@ -247,11 +254,27 @@
 									"type": "DatasetReference"
 								}
 							]
+						},
+						{
+							"name": "Set variable Counter",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "counter",
+								"value": "@substring(concat('0',item()),0,2)"
+							}
 						}
 					]
 				}
 			}
 		],
+		"variables": {
+			"counter": {
+				"type": "String",
+				"defaultValue": "00"
+			}
+		},
 		"annotations": [],
 		"lastPublishTime": "2022-04-13T12:07:55Z"
 	},
