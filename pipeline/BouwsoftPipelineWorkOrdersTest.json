@@ -43,7 +43,7 @@
 					"batchCount": 9,
 					"activities": [
 						{
-							"name": "Copy WorkOrders_copy1",
+							"name": "Copy WorkOrders",
 							"type": "Copy",
 							"dependsOn": [],
 							"policy": {
@@ -61,8 +61,10 @@
 									"requestInterval": "00.00:00:00.010",
 									"requestMethod": "GET",
 									"paginationRules": {
-										"QueryParameters.{offset}": "RANGE:0:9:1",
-										"AbsoluteUrl.{batch}": "RANGE:0:1:1"
+										"AbsoluteUrl.{offset}": {
+											"value": "@item()",
+											"type": "Expression"
+										}
 									}
 								},
 								"sink": {
