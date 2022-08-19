@@ -13,115 +13,6 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('factoryName'), '/BouwsoftPipelineWorkOrders_copy1')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Truncate WorkOrders",
-						"type": "SqlServerStoredProcedure",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"storedProcedureName": "[[dbo].[Truncate_WorkOrders]"
-						},
-						"linkedServiceName": {
-							"referenceName": "AzureSqlDatabase",
-							"type": "LinkedServiceReference"
-						}
-					},
-					{
-						"name": "Lookup Parameters",
-						"type": "Lookup",
-						"dependsOn": [
-							{
-								"activity": "Truncate WorkOrders",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "AzureSqlParameters",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						}
-					},
-					{
-						"name": "ForEach",
-						"type": "ForEach",
-						"dependsOn": [
-							{
-								"activity": "Lookup Parameters",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"items": {
-								"value": "@range(0,15)",
-								"type": "Expression"
-							},
-							"isSequential": true,
-							"activities": [
-								{
-									"name": "Set variable Counter",
-									"type": "SetVariable",
-									"dependsOn": [],
-									"userProperties": [],
-									"typeProperties": {
-										"variableName": "counter",
-										"value": {
-											"value": "@if(greater(item(),9),string(item()),concat('0',string(item())))",
-											"type": "Expression"
-										}
-									}
-								}
-							]
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"variables": {
-					"counter": {
-						"type": "String",
-						"defaultValue": "00"
-					}
-				},
-				"annotations": [],
-				"lastPublishTime": "2022-04-13T12:07:55Z"
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/RestResourceBouwsoftActualCostItems')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -2165,6 +2056,295 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/RestResourceBouwsoftSalesInvoices')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/BouwsoftPipelineWorkOrders')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Truncate WorkOrders",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[Truncate_WorkOrders]"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureSqlDatabase",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Lookup Parameters",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Truncate WorkOrders",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "AzureSqlParameters",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					},
+					{
+						"name": "ForEach",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Lookup Parameters",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@range(0,15)",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "Copy WorkOrders",
+									"type": "Copy",
+									"dependsOn": [
+										{
+											"activity": "Set variable Counter",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "RestSource",
+											"httpRequestTimeout": "00:10:00",
+											"requestInterval": "00.00:00:00.010",
+											"requestMethod": "GET"
+										},
+										"sink": {
+											"type": "AzureSqlSink",
+											"writeBehavior": "upsert",
+											"upsertSettings": {
+												"useTempDB": true,
+												"keys": [
+													"id"
+												]
+											},
+											"sqlWriterUseTableLock": false,
+											"disableMetricsCollection": false
+										},
+										"enableStaging": false,
+										"translator": {
+											"type": "TabularTranslator",
+											"mappings": [
+												{
+													"source": {
+														"path": "[['id']"
+													},
+													"sink": {
+														"name": "id",
+														"type": "Int64"
+													}
+												},
+												{
+													"source": {
+														"path": "[['OrderNr']"
+													},
+													"sink": {
+														"name": "ordernr",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['ProjectNr']"
+													},
+													"sink": {
+														"name": "projectnr",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['WorkDate']"
+													},
+													"sink": {
+														"name": "workdate",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['CustomerName']"
+													},
+													"sink": {
+														"name": "customertname",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['CustomerStreet']"
+													},
+													"sink": {
+														"name": "customerstreet",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['CustomerZIP']"
+													},
+													"sink": {
+														"name": "customerzip",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['CustomerCity']"
+													},
+													"sink": {
+														"name": "customercity",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['WorkDescription']"
+													},
+													"sink": {
+														"name": "workdescription",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['CreationDate']"
+													},
+													"sink": {
+														"name": "creationdate",
+														"type": "DateTime"
+													}
+												},
+												{
+													"source": {
+														"path": "[['status']"
+													},
+													"sink": {
+														"name": "status",
+														"type": "String"
+													}
+												},
+												{
+													"source": {
+														"path": "[['EmployeeNr']"
+													},
+													"sink": {
+														"name": "employee_id",
+														"type": "Int64"
+													}
+												},
+												{
+													"source": {
+														"path": "[['WorkDuration']"
+													},
+													"sink": {
+														"name": "workduration",
+														"type": "Int64"
+													}
+												}
+											],
+											"collectionReference": "$['response']",
+											"mapComplexValuesToString": true
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "RestResourceOutsmartWorkOrders",
+											"type": "DatasetReference",
+											"parameters": {
+												"batch": "@if(greater(item(),9),string(item()),concat('0',string(item())))"
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "AzureSqlWorkOrders",
+											"type": "DatasetReference",
+											"parameters": {}
+										}
+									]
+								},
+								{
+									"name": "Set variable Counter",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "counter",
+										"value": "@if(greater(item(),9),string(item()),concat('0',string(item())))"
+									}
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"counter": {
+						"type": "String",
+						"defaultValue": "00"
+					}
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-04-13T12:07:55Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/RestResourceOutsmartWorkOrders')]"
 			]
 		}
 	]
