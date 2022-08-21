@@ -2284,7 +2284,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"items": {
-								"value": "@range(0,15)",
+								"value": "@range(0,20)",
 								"type": "Expression"
 							},
 							"isSequential": true,
@@ -2477,7 +2477,10 @@
 									"userProperties": [],
 									"typeProperties": {
 										"variableName": "counter",
-										"value": "@if(greater(item(),9),string(item()),concat('0',string(item())))"
+										"value": {
+											"value": "@if(greater(item(),9),string(item()),concat('0',string(item())))",
+											"type": "Expression"
+										}
 									}
 								}
 							]
